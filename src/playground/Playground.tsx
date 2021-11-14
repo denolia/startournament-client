@@ -17,15 +17,15 @@ function Playground() {
 
   return (
     <div className={css.layout}>
-      <div className={css.enemyPlayer}>
-        <Enemy cards={cardsPlayer1} />
-      </div>
-      <div className={css.table}>{/*<Table />*/}</div>
-      <div className={css.player}>
-        <PlayerProvider>
+      <PlayerProvider>
+        <div className={css.enemyPlayer}>
+          <Enemy />
+        </div>
+        <div className={css.table}>{/*<Table />*/}</div>
+        <div className={css.player}>
           <Player />
-        </PlayerProvider>
-      </div>
+        </div>
+      </PlayerProvider>
     </div>
   );
 }
