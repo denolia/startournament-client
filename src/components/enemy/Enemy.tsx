@@ -1,10 +1,10 @@
-import { usePlayerContext } from "../../game/gameContext/gameContext";
+import { useGameContext } from "../../game/gameContext/gameContext";
 import Card from "../card/Card";
 import PlayerInfo from "../player/PlayerInfo";
 import * as css from "./Enemy.module.css";
 
 function Enemy() {
-  const { enemy } = usePlayerContext();
+  const { enemy } = useGameContext();
 
   return (
     <div className={css.container}>

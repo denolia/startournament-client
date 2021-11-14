@@ -1,10 +1,10 @@
 import { getImgUrl } from "../../api/getImgUrl";
-import { usePlayerContext } from "../../game/gameContext/gameContext";
+import { useGameContext } from "../../game/gameContext/gameContext";
 import * as css from "./Card.module.css";
 import { CardDefinition } from "./types";
 
 function Card({ card }: { card: CardDefinition }) {
-  const { handleCardClick } = usePlayerContext();
+  const { handleCardClick } = useGameContext();
 
   return (
     <div className={css.container} onClick={(e) => handleCardClick(card)}>

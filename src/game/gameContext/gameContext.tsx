@@ -5,7 +5,7 @@ import { CardDefinition } from "../../components/card/types";
 import { PlayerData } from "../../components/player/types";
 import { GameStatus } from "../types";
 
-const GameContext = React.createContext<PlayContextType>({
+const GameContext = React.createContext<GameContextType>({
   player: undefined,
   enemy: undefined,
   table: [],
@@ -17,7 +17,7 @@ const GameContext = React.createContext<PlayContextType>({
 
 GameContext.displayName = "PlayerContext";
 
-interface PlayContextType {
+interface GameContextType {
   player: PlayerData | undefined;
   enemy: PlayerData | undefined;
   table: CardDefinition[];
@@ -27,8 +27,8 @@ interface PlayContextType {
   handleCardClick: (card: CardDefinition) => void;
 }
 
-export function usePlayerContext() {
-  const context = useContext<PlayContextType>(GameContext);
+export function useGameContext() {
+  const context = useContext<GameContextType>(GameContext);
 
   if (context === undefined) {
     throw new Error(`usePlayerContext must be used within a PlayerProvider`);
@@ -36,7 +36,7 @@ export function usePlayerContext() {
   return context;
 }
 
-function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
+function GameProvider({ children }: React.PropsWithChildren<{}>) {
   const [player, setPlayer] = useState<PlayerData | undefined>();
   const [enemy, setEnemy] = useState<PlayerData | undefined>();
 
@@ -87,4 +87,4 @@ function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }
 
-export default PlayerProvider;
+export default GameProvider;
