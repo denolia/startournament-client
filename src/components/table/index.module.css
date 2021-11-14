@@ -5,11 +5,23 @@
     padding: 20px 40px;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 .notification {
-    height: 20px;
-    background-color: aquamarine;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    z-index: 1000;
+    width: 100%;
+    margin-top: 10px;
+    height: 180px;
+    font-size: 60px;
+    text-align: center;
+    background-color: rgba(0,0,0, 0.6);
+
 }
 .container {
-    height: 50vh;
+    /*height: auto;*/
 }

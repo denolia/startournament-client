@@ -1,8 +1,11 @@
 .container {
+    width: 100%;
     display: grid;
     grid-template-columns: 100px auto;
 }
 
 .cards {
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
