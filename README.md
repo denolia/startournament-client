@@ -1,4 +1,11 @@
 # Start Tournament
 
 A client for Start Tournament game.
-Based on CRA.
+
+
+Stack: create-react-app + Typescript
+
+
+Backend: https://github.com/demoth/stournament
+
+![image](https://user-images.githubusercontent.com/7235702/141701626-823e23a2-2a9b-41df-9950-bc24a0090a3a.png)
