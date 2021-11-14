@@ -1,12 +1,16 @@
+import { AxiosResponse } from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { getCurrentHand, playCard } from "../api/playerStateApi";
+import { getGame, playCard } from "../api/playerStateApi";
 import { CardDefinition } from "../card/types";
+import { GameStatus } from "../game/types";
 
 const PlayerContext = React.createContext<PlayContextType>({
   hand: [],
   enemyHand: [],
+  table: [],
   health: 100,
   enemyHealth: 100,
+  gameStatus: undefined,
   handleCardClick: () => {},
 });
 
@@ -15,8 +19,10 @@ PlayerContext.displayName = "PlayerContext";
 interface PlayContextType {
   hand: CardDefinition[];
   enemyHand: CardDefinition[];
+  table: CardDefinition[];
   health: number;
   enemyHealth: number;
+  gameStatus: GameStatus | undefined;
   handleCardClick: (card: CardDefinition) => void;
 }
 
@@ -35,26 +41,39 @@ function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
   const [enemyHand, setEnemyHand] = useState<CardDefinition[]>([]);
   const [health, setHealth] = useState(100);
   const [enemyHealth, setEnemyHealth] = useState(100);
+  const [gameStatus, setGameStatus] = useState<GameStatus | undefined>();
+
+  const updateState = (res: AxiosResponse) => {
+    const data = res?.data;
+    if (data) {
+      setHand(data.player1?.cards);
+      setEnemyHand(data.player2?.cards);
+      setHealth(data.player1?.health);
+      setEnemyHealth(data.player2?.health);
+      setGameStatus(data.status as GameStatus | undefined);
+    }
+  };
 
   useEffect(() => {
     async function fetchHand() {
-      const res = await getCurrentHand();
+      const res = await getGame();
 
-      if (res?.data?.player1?.cards) {
-        setHand(res.data?.player1.cards);
-        setEnemyHand(res.data?.player2.cards);
-        setHealth(res.data?.player1.health);
-        setEnemyHealth(res.data?.player2.health);
-      }
+      updateState(res);
     }
     fetchHand();
   }, []);
 
-  const handleCardClick = (card: CardDefinition) => {
+  const handleCardClick = async (card: CardDefinition) => {
     setHand((cards) => cards.filter((c) => c.id !== card.id));
     setTable((cards) => [...cards, card]);
-    const response = playCard(card);
-    console.log({ response });
+    const res = await playCard(
+      card,
+      gameStatus === GameStatus.PLAYER_1_TURN ? "1" : "2"
+    );
+
+    updateState(res);
+
+    console.log({ res });
   };
 
   const value = {
@@ -63,6 +82,8 @@ function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
     health,
     enemyHealth,
     handleCardClick,
+    gameStatus,
+    table,
   };
 
   return (

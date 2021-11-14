@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CardDefinition } from "../card/types";
 
-export async function getCurrentHand(): Promise<any> {
+export async function getGame(): Promise<any> {
   try {
     return await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/state`);
   } catch (error) {
@@ -9,10 +9,13 @@ export async function getCurrentHand(): Promise<any> {
   }
 }
 
-export async function playCard(card: CardDefinition): Promise<any> {
+export async function playCard(
+  card: CardDefinition,
+  playerId: string
+): Promise<any> {
   try {
     return await axios.post(
-      `${process.env.REACT_APP_API_ENDPOINT}/action?player=1&card=${card.id}`,
+      `${process.env.REACT_APP_API_ENDPOINT}/action?player=${playerId}&card=${card.id}`,
       {}
     );
   } catch (error) {
