@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { getCurrentHand } from "../api/playerStateApi";
+import { getCurrentHand, playCard } from "../api/playerStateApi";
 import { CardDefinition } from "../card/types";
 
 const PlayerContext = React.createContext<PlayContextType>({
@@ -7,6 +7,7 @@ const PlayerContext = React.createContext<PlayContextType>({
   enemyHand: [],
   health: 100,
   enemyHealth: 100,
+  handleCardClick: () => {},
 });
 
 PlayerContext.displayName = "PlayerContext";
@@ -16,6 +17,7 @@ interface PlayContextType {
   enemyHand: CardDefinition[];
   health: number;
   enemyHealth: number;
+  handleCardClick: (card: CardDefinition) => void;
 }
 
 export function usePlayerContext() {
@@ -29,6 +31,7 @@ export function usePlayerContext() {
 
 function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
   const [hand, setHand] = useState<CardDefinition[]>([]);
+  const [table, setTable] = useState<CardDefinition[]>([]);
   const [enemyHand, setEnemyHand] = useState<CardDefinition[]>([]);
   const [health, setHealth] = useState(100);
   const [enemyHealth, setEnemyHealth] = useState(100);
@@ -47,11 +50,19 @@ function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
     fetchHand();
   }, []);
 
+  const handleCardClick = (card: CardDefinition) => {
+    setHand((cards) => cards.filter((c) => c.id !== card.id));
+    setTable((cards) => [...cards, card]);
+    const response = playCard(card);
+    console.log({ response });
+  };
+
   const value = {
     hand,
     enemyHand,
     health,
     enemyHealth,
+    handleCardClick,
   };
 
   return (
