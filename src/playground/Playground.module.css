@@ -1,14 +1,19 @@
 .layout {
     display: grid;
     height: 100vh;
-    grid-template-columns: auto auto;
+
 }
 
-.leftPlayer {
-    color: darkmagenta;
+
+.enemyPlayer, .player {
+    background-color: aliceblue;
+    height: 25vh;
+    display: flex;
+    justify-content: center;
 }
 
-.rightPlayer {
-    color: navy;
-    background-color: antiquewhite;
+.table {
+    background-color: darkolivegreen;
+    height: 50vh;
 }
+

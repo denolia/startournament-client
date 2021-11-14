@@ -25,10 +25,11 @@ function Playground() {
 
   return (
     <div className={css.layout}>
-      <div className={css.leftPlayer}>
+      <div className={css.enemyPlayer}>
         <Player cards={cardsPlayer1} />
       </div>
-      <div className={css.rightPlayer}>
+      <div className={css.table}>{/*<Table />*/}</div>
+      <div className={css.player}>
         <Player cards={cardsPlayer2} />
       </div>
     </div>
