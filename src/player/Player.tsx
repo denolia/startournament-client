@@ -1,11 +1,13 @@
 import Card from "../card/Card";
-import { CardDefinition } from "../card/types";
 import * as css from "./Player.module.css";
+import { usePlayerContext } from "../playerContext/playerContext";
 
-function Player({ cards }: { cards: CardDefinition[] }) {
+function Player() {
+  const { hand } = usePlayerContext();
+
   return (
     <div className={css.container}>
-      {cards?.map((card) => (
+      {hand.map((card) => (
         <Card key={card.id} card={card} />
       ))}
     </div>

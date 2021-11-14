@@ -1,36 +1,30 @@
 import * as css from "./Playground.module.css";
 import Player from "../player/Player";
+import PlayerProvider from "../playerContext/playerContext";
+import Enemy from "../enemy/Enemy";
 
 function Playground() {
   const cardsPlayer1 = [
-    { id: "1", name: "Fireball", imgUrl: "/" },
-    { id: "2", name: "Healing", imgUrl: "/" },
+    { id: "1", name: "Fireball", iconName: "/" },
+    { id: "2", name: "Healing", iconName: "/" },
     {
       id: "3",
       name: "Fireball",
-      imgUrl: "/",
+      iconName: "/",
     },
-    { id: "4", name: "Fireball", imgUrl: "/" },
-  ];
-  const cardsPlayer2 = [
-    { id: "5", name: "Healing", imgUrl: "/" },
-    { id: "6", name: "Fireball", imgUrl: "/" },
-    {
-      id: "7",
-      name: "Healing",
-      imgUrl: "/",
-    },
-    { id: "8", name: "Fireball", imgUrl: "/" },
+    { id: "4", name: "Fireball", iconName: "/" },
   ];
 
   return (
     <div className={css.layout}>
       <div className={css.enemyPlayer}>
-        <Player cards={cardsPlayer1} />
+        <Enemy cards={cardsPlayer1} />
       </div>
       <div className={css.table}>{/*<Table />*/}</div>
       <div className={css.player}>
-        <Player cards={cardsPlayer2} />
+        <PlayerProvider>
+          <Player />
+        </PlayerProvider>
       </div>
     </div>
   );

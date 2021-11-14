@@ -1,7 +1,7 @@
 export interface CardDefinition {
   id: string;
   name: string;
-  imgUrl: string;
+  iconName: string;
   // img?
   // effect???
 }
