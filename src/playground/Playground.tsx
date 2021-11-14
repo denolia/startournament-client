@@ -4,17 +4,6 @@ import PlayerProvider from "../playerContext/playerContext";
 import Enemy from "../enemy/Enemy";
 
 function Playground() {
-  const cardsPlayer1 = [
-    { id: "1", name: "Fireball", iconName: "/" },
-    { id: "2", name: "Healing", iconName: "/" },
-    {
-      id: "3",
-      name: "Fireball",
-      iconName: "/",
-    },
-    { id: "4", name: "Fireball", iconName: "/" },
-  ];
-
   return (
     <div className={css.layout}>
       <PlayerProvider>
