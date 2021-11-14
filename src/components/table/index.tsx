@@ -6,7 +6,9 @@ function Table() {
   const { message, table } = useGameContext();
   return (
     <div className={css.container}>
-      <div className={css.notification}>{message}</div>
+      <div className={css.notification} style={{ opacity: message ? 1 : 0 }}>
+        {message}
+      </div>
 
       <div className={css.tableArea}>
         {table?.map((card) => (

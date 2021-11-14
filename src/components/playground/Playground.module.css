@@ -1,12 +1,13 @@
 .layout {
+    color: white;
     display: grid;
     height: 100vh;
-
+    background-position: center;
 }
 
 
 .enemyPlayer, .player {
-    background-color: aliceblue;
+    background-color: rgba(0,0,0, 0.6);
     height: 25vh;
     display: flex;
     justify-content: center;

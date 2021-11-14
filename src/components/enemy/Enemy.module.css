@@ -1,3 +1,8 @@
 .container {
+    display: grid;
+    grid-template-columns: 100px auto;
+}
+
+.cards {
     display: flex;
 }
