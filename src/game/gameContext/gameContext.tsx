@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { getGame, playCard } from "../../api/playerStateApi";
 import { CardDefinition } from "../../components/card/types";
-import { PlayerData } from "../../components/player/types";
+import { PlayerData, PlayerType } from "../../components/player/types";
 import { GameStatus } from "../types";
 
 const GameContext = React.createContext<GameContextType>({
@@ -21,7 +21,7 @@ interface GameContextType {
   enemy: PlayerData | undefined;
   table: CardDefinition[];
   gameStatus: GameStatus | undefined;
-  handleCardClick: (card: CardDefinition) => void;
+  handleCardClick: (card: CardDefinition, player: PlayerType) => void;
   message: string;
 }
 
@@ -61,16 +61,13 @@ function GameProvider({ children }: React.PropsWithChildren<{}>) {
     fetchHand();
   }, []);
 
-  const handleCardClick = async (card: CardDefinition) => {
-    const res = await playCard(
-      card,
-      gameStatus === GameStatus.PLAYER_1_TURN ? "1" : "2"
-    );
+  const handleCardClick = async (card: CardDefinition, player: PlayerType) => {
+    const res = await playCard(card, player);
 
     updateState(res);
-    setTable((cards) => [...cards, card]);
-
-    console.log({ res });
+    if (!res?.data?.message) {
+      setTable((cards) => [...cards, card]);
+    }
   };
 
   const value = {

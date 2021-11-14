@@ -3,6 +3,7 @@ import { GameStatus } from "../../game/types";
 import Card from "../card/Card";
 import * as css from "./Player.module.css";
 import PlayerInfo from "./PlayerInfo";
+import { PlayerType } from "./types";
 
 function Player() {
   const { player, gameStatus } = useGameContext();
@@ -15,7 +16,7 @@ function Player() {
       />
       <div className={css.cards}>
         {player?.cards?.map((card) => (
-          <Card key={card.id} card={card} />
+          <Card key={card.id} card={card} player={PlayerType.PLAYER} />
         ))}
       </div>
     </div>

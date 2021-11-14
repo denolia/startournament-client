@@ -2,6 +2,7 @@ import { useGameContext } from "../../game/gameContext/gameContext";
 import { GameStatus } from "../../game/types";
 import Card from "../card/Card";
 import PlayerInfo from "../player/PlayerInfo";
+import { PlayerType } from "../player/types";
 import * as css from "./Enemy.module.css";
 
 function Enemy() {
@@ -15,7 +16,7 @@ function Enemy() {
       />
       <div className={css.cards}>
         {enemy?.cards?.map((card) => (
-          <Card key={card.id} card={card} />
+          <Card key={card.id} card={card} player={PlayerType.ENEMY} />
         ))}
       </div>
     </div>

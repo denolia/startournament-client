@@ -6,3 +6,8 @@ export interface PlayerData {
   cards: CardDefinition[];
   name: string;
 }
+
+export enum PlayerType {
+  PLAYER = 1,
+  ENEMY = 2,
+}
