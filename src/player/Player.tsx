@@ -1,13 +1,16 @@
 import Card from "../card/Card";
-import * as css from "./Player.module.css";
 import { usePlayerContext } from "../playerContext/playerContext";
+import * as css from "./Player.module.css";
+import PlayerInfo from "./PlayerInfo";
 
 function Player() {
-  const { hand } = usePlayerContext();
+  const { player } = usePlayerContext();
 
   return (
     <div className={css.container}>
-      {hand.map((card) => (
+      <PlayerInfo player={player} />
+
+      {player?.cards?.map((card) => (
         <Card key={card.id} card={card} />
       ))}
     </div>

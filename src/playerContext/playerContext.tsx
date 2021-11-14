@@ -3,10 +3,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { getGame, playCard } from "../api/playerStateApi";
 import { CardDefinition } from "../card/types";
 import { GameStatus } from "../game/types";
+import { PlayerData } from "../player/types";
 
 const PlayerContext = React.createContext<PlayContextType>({
-  hand: [],
-  enemyHand: [],
+  player: undefined,
+  enemy: undefined,
   table: [],
   health: 0,
   enemyHealth: 0,
@@ -17,8 +18,8 @@ const PlayerContext = React.createContext<PlayContextType>({
 PlayerContext.displayName = "PlayerContext";
 
 interface PlayContextType {
-  hand: CardDefinition[];
-  enemyHand: CardDefinition[];
+  player: PlayerData | undefined;
+  enemy: PlayerData | undefined;
   table: CardDefinition[];
   health: number;
   enemyHealth: number;
@@ -33,11 +34,6 @@ export function usePlayerContext() {
     throw new Error(`usePlayerContext must be used within a PlayerProvider`);
   }
   return context;
-}
-
-interface PlayerData {
-  health: number;
-  cards: CardDefinition[];
 }
 
 function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
@@ -79,8 +75,8 @@ function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
   };
 
   const value = {
-    hand: player?.cards ?? [],
-    enemyHand: enemy?.cards ?? [],
+    player,
+    enemy,
     health: player?.health ?? 0,
     enemyHealth: enemy?.health ?? 0,
     handleCardClick,
