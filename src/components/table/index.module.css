@@ -1,7 +1,16 @@
 .tableArea {
-    height: auto;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px 40px;
+    align-items: center;
+    justify-content: center;
 }
 .notification {
     height: 20px;
     background-color: aquamarine;
+}
+.container {
+    background-color: darkolivegreen;
+    height: 50vh;
 }

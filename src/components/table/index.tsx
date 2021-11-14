@@ -5,7 +5,7 @@ import * as css from "./index.module.css";
 function Table() {
   const { message, table } = useGameContext();
   return (
-    <>
+    <div className={css.container}>
       <div className={css.notification}>{message}</div>
 
       <div className={css.tableArea}>
@@ -13,7 +13,7 @@ function Table() {
           <Card key={card.id} card={card} />
         ))}
       </div>
-    </>
+    </div>
   );
 }
 
