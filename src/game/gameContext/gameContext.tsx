@@ -1,11 +1,11 @@
 import { AxiosResponse } from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { getGame, playCard } from "../api/playerStateApi";
-import { CardDefinition } from "../card/types";
-import { GameStatus } from "../game/types";
-import { PlayerData } from "../player/types";
+import { getGame, playCard } from "../../api/playerStateApi";
+import { CardDefinition } from "../../components/card/types";
+import { PlayerData } from "../../components/player/types";
+import { GameStatus } from "../types";
 
-const PlayerContext = React.createContext<PlayContextType>({
+const GameContext = React.createContext<PlayContextType>({
   player: undefined,
   enemy: undefined,
   table: [],
@@ -15,7 +15,7 @@ const PlayerContext = React.createContext<PlayContextType>({
   handleCardClick: () => {},
 });
 
-PlayerContext.displayName = "PlayerContext";
+GameContext.displayName = "PlayerContext";
 
 interface PlayContextType {
   player: PlayerData | undefined;
@@ -28,7 +28,7 @@ interface PlayContextType {
 }
 
 export function usePlayerContext() {
-  const context = useContext<PlayContextType>(PlayerContext);
+  const context = useContext<PlayContextType>(GameContext);
 
   if (context === undefined) {
     throw new Error(`usePlayerContext must be used within a PlayerProvider`);
@@ -84,9 +84,7 @@ function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
     table,
   };
 
-  return (
-    <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>
-  );
+  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }
 
 export default PlayerProvider;

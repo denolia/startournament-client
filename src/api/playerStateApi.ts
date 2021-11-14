@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CardDefinition } from "../card/types";
+import { CardDefinition } from "../components/card/types";
 
 export async function getGame(): Promise<any> {
   try {

@@ -1,6 +1,6 @@
+import { usePlayerContext } from "../../game/gameContext/gameContext";
 import Card from "../card/Card";
 import PlayerInfo from "../player/PlayerInfo";
-import { usePlayerContext } from "../playerContext/playerContext";
 import * as css from "./Enemy.module.css";
 
 function Enemy() {

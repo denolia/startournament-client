@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import Playground from "./playground/Playground";
+import Playground from "./components/playground/Playground";
 
 function App() {
   return (

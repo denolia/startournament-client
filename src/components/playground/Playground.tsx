@@ -1,7 +1,7 @@
-import * as css from "./Playground.module.css";
-import Player from "../player/Player";
-import PlayerProvider from "../playerContext/playerContext";
+import PlayerProvider from "../../game/gameContext/gameContext";
 import Enemy from "../enemy/Enemy";
+import Player from "../player/Player";
+import * as css from "./Playground.module.css";
 
 function Playground() {
   return (

@@ -1,5 +1,5 @@
+import { usePlayerContext } from "../../game/gameContext/gameContext";
 import Card from "../card/Card";
-import { usePlayerContext } from "../playerContext/playerContext";
 import * as css from "./Player.module.css";
 import PlayerInfo from "./PlayerInfo";
 

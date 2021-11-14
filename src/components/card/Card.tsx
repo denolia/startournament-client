@@ -1,5 +1,5 @@
-import { getImgUrl } from "../api/getImgUrl";
-import { usePlayerContext } from "../playerContext/playerContext";
+import { getImgUrl } from "../../api/getImgUrl";
+import { usePlayerContext } from "../../game/gameContext/gameContext";
 import * as css from "./Card.module.css";
 import { CardDefinition } from "./types";
 
