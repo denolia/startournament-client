@@ -8,8 +8,8 @@ const PlayerContext = React.createContext<PlayContextType>({
   hand: [],
   enemyHand: [],
   table: [],
-  health: 100,
-  enemyHealth: 100,
+  health: 0,
+  enemyHealth: 0,
   gameStatus: undefined,
   handleCardClick: () => {},
 });
@@ -35,21 +35,24 @@ export function usePlayerContext() {
   return context;
 }
 
+interface PlayerData {
+  health: number;
+  cards: CardDefinition[];
+}
+
 function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
-  const [hand, setHand] = useState<CardDefinition[]>([]);
+  const [player, setPlayer] = useState<PlayerData | undefined>();
+  const [enemy, setEnemy] = useState<PlayerData | undefined>();
+
   const [table, setTable] = useState<CardDefinition[]>([]);
-  const [enemyHand, setEnemyHand] = useState<CardDefinition[]>([]);
-  const [health, setHealth] = useState(100);
-  const [enemyHealth, setEnemyHealth] = useState(100);
+
   const [gameStatus, setGameStatus] = useState<GameStatus | undefined>();
 
   const updateState = (res: AxiosResponse) => {
     const data = res?.data;
     if (data) {
-      setHand(data.player1?.cards);
-      setEnemyHand(data.player2?.cards);
-      setHealth(data.player1?.health);
-      setEnemyHealth(data.player2?.health);
+      setPlayer(data.player1);
+      setEnemy(data.player2);
       setGameStatus(data.status as GameStatus | undefined);
     }
   };
@@ -64,23 +67,22 @@ function PlayerProvider({ children }: React.PropsWithChildren<{}>) {
   }, []);
 
   const handleCardClick = async (card: CardDefinition) => {
-    setHand((cards) => cards.filter((c) => c.id !== card.id));
-    setTable((cards) => [...cards, card]);
     const res = await playCard(
       card,
       gameStatus === GameStatus.PLAYER_1_TURN ? "1" : "2"
     );
 
     updateState(res);
+    setTable((cards) => [...cards, card]);
 
     console.log({ res });
   };
 
   const value = {
-    hand,
-    enemyHand,
-    health,
-    enemyHealth,
+    hand: player?.cards ?? [],
+    enemyHand: enemy?.cards ?? [],
+    health: player?.health ?? 0,
+    enemyHealth: enemy?.health ?? 0,
     handleCardClick,
     gameStatus,
     table,
