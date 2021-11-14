@@ -49,6 +49,12 @@ function GameProvider({ children }: React.PropsWithChildren<{}>) {
       setEnemy(data.player2);
       setGameStatus(data.status as GameStatus | undefined);
       setMessage(data.message);
+      if (
+        data.status === GameStatus.PLAYER_1_WON ||
+        data.status === GameStatus.PLAYER_2_WON
+      ) {
+        setTable([]);
+      }
     }
   };
 
