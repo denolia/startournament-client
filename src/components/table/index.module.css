@@ -8,19 +8,22 @@
     position: relative;
 }
 .notification {
-    position: absolute;
+    position:fixed;
+    top:50%;
+    left:0;
+
+    margin-top: -100px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 50px;
-    z-index: 1000;
+
+    z-index: 100;
     width: 100%;
-    margin-top: 10px;
-    height: 180px;
+
+    height: 200px;
     font-size: 60px;
     text-align: center;
     background-color: rgba(0,0,0, 0.6);
-
 }
 .container {
     /*height: auto;*/
