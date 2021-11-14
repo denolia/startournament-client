@@ -9,8 +9,7 @@ const GameContext = React.createContext<GameContextType>({
   player: undefined,
   enemy: undefined,
   table: [],
-  health: 0,
-  enemyHealth: 0,
+  message: "",
   gameStatus: undefined,
   handleCardClick: () => {},
 });
@@ -21,10 +20,9 @@ interface GameContextType {
   player: PlayerData | undefined;
   enemy: PlayerData | undefined;
   table: CardDefinition[];
-  health: number;
-  enemyHealth: number;
   gameStatus: GameStatus | undefined;
   handleCardClick: (card: CardDefinition) => void;
+  message: string;
 }
 
 export function useGameContext() {
@@ -41,8 +39,8 @@ function GameProvider({ children }: React.PropsWithChildren<{}>) {
   const [enemy, setEnemy] = useState<PlayerData | undefined>();
 
   const [table, setTable] = useState<CardDefinition[]>([]);
-
   const [gameStatus, setGameStatus] = useState<GameStatus | undefined>();
+  const [message, setMessage] = useState<string>("");
 
   const updateState = (res: AxiosResponse) => {
     const data = res?.data;
@@ -50,6 +48,7 @@ function GameProvider({ children }: React.PropsWithChildren<{}>) {
       setPlayer(data.player1);
       setEnemy(data.player2);
       setGameStatus(data.status as GameStatus | undefined);
+      setMessage(data.message);
     }
   };
 
@@ -82,6 +81,7 @@ function GameProvider({ children }: React.PropsWithChildren<{}>) {
     handleCardClick,
     gameStatus,
     table,
+    message,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
