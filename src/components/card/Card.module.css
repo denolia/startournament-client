@@ -1,5 +1,19 @@
 .container {
-    border: 2px solid grey;
+    background-color: rgba(128,128,128,0.8);
     margin: 10px;
-    width: 100px;
+    width: 128px;
+    height: 230px;
+}
+.title {
+    padding: 4px 8px;
+    font-weight: bold;
+}
+
+.description {
+    padding: 4px 8px;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
