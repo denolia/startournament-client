@@ -15,9 +15,11 @@ function Enemy() {
         playersTurn={gameStatus === GameStatus.PLAYER_2_TURN}
       />
       <div className={css.cards}>
-        {enemy?.cards?.map((card) => (
-          <Card key={card.id} card={card} player={PlayerType.ENEMY} />
-        ))}
+        {enemy?.cards
+          ? Object.values(enemy.cards).map((card) => (
+              <Card key={card.id} card={card} player={PlayerType.ENEMY} />
+            ))
+          : null}
       </div>
     </div>
   );

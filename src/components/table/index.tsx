@@ -1,6 +1,6 @@
 import { useGameContext } from "../../game/gameContext/gameContext";
 import Card from "../card/Card";
-import * as css from "./index.module.css";
+import css from "./index.module.css";
 
 function Table() {
   const { message, table } = useGameContext();
