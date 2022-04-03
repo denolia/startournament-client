@@ -1,34 +1,13 @@
-
-const webSocketUrl = "192.168.2.104:8080";
-let ws: WebSocket | null = null;
+import { useWebSocketContext } from "../../webSocketContext/WebSocketProvider";
 
 function Playground() {
-  function connectToWS() {
-    console.log("starting connection");
-    ws = new WebSocket(`ws://${webSocketUrl}/web-socket`);
-    ws.onopen = () => {
-      console.log("Connected to server");
-    };
-    ws.onmessage = (data) => {
-      console.log("Message: ");
-      console.log({ data });
-    };
-  }
-
-  function sendMsg() {
-    const message = "how are you";
-    ws?.send(JSON.stringify({ content: message }));
-  }
-
-  function closeConn() {
-      ws?.close();
-  }
+  const { connectToWS, closeConnection, sendMessage } = useWebSocketContext();
 
   return (
     <>
       <button onClick={connectToWS}>connect</button>
-      <button onClick={sendMsg}>send msg</button>
-      <button onClick={closeConn}>close conn</button>
+      <button onClick={() => sendMessage("hello")}>send msg</button>
+      <button onClick={closeConnection}>close conn</button>
       {/*<div*/}
       {/*  className={css.layout}*/}
       {/*  style={{ backgroundImage: getBackgroundImage() }}*/}
