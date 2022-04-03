@@ -1,4 +1,4 @@
-import { useWebSocketContext } from "../../webSocketContext/WebSocketProvider";
+import { useWebSocketContext } from "../../contexts/webSocketContext/WebSocketProvider";
 
 function Playground() {
   const { connectToWS, closeConnection, sendMessage } = useWebSocketContext();

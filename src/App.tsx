@@ -1,14 +1,17 @@
 import React from "react";
 import "./App.css";
 import Playground from "./components/playground/Playground";
-import WebSocketProvider from "./webSocketContext/WebSocketProvider";
+import AuthProvider from "./contexts/authContext/AuthProvider";
+import WebSocketProvider from "./contexts/webSocketContext/WebSocketProvider";
 
 function App() {
   return (
     <div className="App">
-      <WebSocketProvider>
-        <Playground />
-      </WebSocketProvider>
+      <AuthProvider>
+        <WebSocketProvider>
+          <Playground />
+        </WebSocketProvider>
+      </AuthProvider>
     </div>
   );
 }
