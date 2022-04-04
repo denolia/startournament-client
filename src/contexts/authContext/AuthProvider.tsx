@@ -7,12 +7,14 @@ interface AuthContext {
   login: (username: string, password: string) => void;
   logout: () => void;
   user: User | null;
+  token: string | null;
 }
 
 const authContext = React.createContext<AuthContext>({
   login: () => {},
   logout: () => {},
   user: null,
+  token: null,
 });
 
 export function useAuthContext(): AuthContext {
@@ -27,6 +29,7 @@ export function useAuthContext(): AuthContext {
 
 function AuthProvider(props: React.PropsWithChildren<{}>) {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   async function login(username: string, password: string) {
     console.log("login...");
@@ -34,7 +37,8 @@ function AuthProvider(props: React.PropsWithChildren<{}>) {
     console.log({ res });
 
     if (res) {
-      setUser(res.data);
+      setToken(res.data.jwt);
+      // todo parse
     }
   }
 
@@ -43,8 +47,8 @@ function AuthProvider(props: React.PropsWithChildren<{}>) {
   }
 
   return (
-    <authContext.Provider value={{ login, logout, user }}>
-      {user ? props.children : <LoginPage />}
+    <authContext.Provider value={{ login, logout, user, token }}>
+      {token ? props.children : <LoginPage />}
     </authContext.Provider>
   );
 }
