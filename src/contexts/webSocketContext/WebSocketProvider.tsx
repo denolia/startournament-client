@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useAuthContext } from "../authContext/AuthProvider";
 
 const webSocketUrl = "192.168.2.104:8080";
 
 interface WebSocketContext {
-  connectToWS: () => void;
-  sendMessage: (msg: string) => void;
+  createNewGame: () => void;
+  joinGame: (gameId: string) => void;
+  startGame: () => void;
   closeConnection: () => void;
 }
 
 const webSocketContext = React.createContext<WebSocketContext>({
-  connectToWS: () => {},
-  sendMessage: (msg: string) => {},
+  createNewGame: () => {},
+  joinGame: () => {},
+  startGame: () => {},
   closeConnection: () => {},
 });
 
@@ -26,8 +29,29 @@ export function useWebSocketContext(): WebSocketContext {
   return context;
 }
 
+enum MessageType {
+  jwt = "jwt",
+  newgame = "newgame",
+  joingame = "joingame",
+  startgame = "startgame",
+  playcard = "playcard",
+  skipturn = "skipturn",
+}
+
+function sendMessage(ws: WebSocket | null, type: MessageType, data: object) {
+  if (!ws) {
+    console.warn(
+      "Cannot send the message. WebSocket connection is not established"
+    );
+    return;
+  }
+  ws.send(JSON.stringify({ ...data, _type: type }));
+  console.log(`sent ${type} message`);
+}
+
 function WebSocketProvider(props: React.PropsWithChildren<{}>) {
   const [ws, setWs] = useState<WebSocket | null>(null);
+  const { token } = useAuthContext();
 
   function connectToWS() {
     console.log("starting connection");
@@ -35,24 +59,29 @@ function WebSocketProvider(props: React.PropsWithChildren<{}>) {
 
     newWs.onopen = () => {
       console.log("Connected to server");
+      // todo error handling
+      sendMessage(newWs, MessageType.jwt, { jwt: `Bearer ${token}` });
+      // todo: handle negative case
+      console.log("Connection approved");
     };
     newWs.onmessage = (data) => {
-      console.log("Message: ");
+      console.log("Message received: ");
       console.log({ data });
     };
 
     setWs(newWs);
   }
 
-  function sendMessage(msg: string) {
-    const message = "how are you";
-    if (!ws) {
-      console.warn(
-        "Cannot send the message. WebSocket connection is not established"
-      );
-      return;
-    }
-    ws.send(JSON.stringify({ content: message }));
+  function createNewGame() {
+    sendMessage(ws, MessageType.newgame, {});
+  }
+
+  function startGame() {
+    sendMessage(ws, MessageType.startgame, {});
+  }
+
+  function joinGame(gameId: string) {
+    sendMessage(ws, MessageType.joingame, { gameId: gameId });
   }
 
   function closeConnection() {
@@ -72,7 +101,7 @@ function WebSocketProvider(props: React.PropsWithChildren<{}>) {
 
   return (
     <webSocketContext.Provider
-      value={{ connectToWS, sendMessage, closeConnection }}
+      value={{ createNewGame, joinGame, startGame, closeConnection }}
     >
       {props.children}
     </webSocketContext.Provider>

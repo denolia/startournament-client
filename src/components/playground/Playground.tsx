@@ -1,13 +1,24 @@
+import { useState } from "react";
 import { useWebSocketContext } from "../../contexts/webSocketContext/WebSocketProvider";
 
 function Playground() {
-  const { connectToWS, closeConnection, sendMessage } = useWebSocketContext();
+  const [gameId, setGameId] = useState<string>("");
+  const { closeConnection, createNewGame, joinGame, startGame } =
+    useWebSocketContext();
 
   return (
     <>
-      <button onClick={connectToWS}>connect</button>
-      <button onClick={() => sendMessage("hello")}>send msg</button>
-      <button onClick={closeConnection}>close conn</button>
+      <button onClick={() => createNewGame()}>Create a new game</button>
+      <input
+        type="text"
+        value={gameId}
+        onChange={(e) => {
+          setGameId(e.target.value);
+        }}
+      />
+      <button onClick={() => joinGame(gameId)}>Join a game</button>
+      <button onClick={() => startGame()}>Start the game</button>
+      <button onClick={closeConnection}>Disconnect</button>
       {/*<div*/}
       {/*  className={css.layout}*/}
       {/*  style={{ backgroundImage: getBackgroundImage() }}*/}
