@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../authContext/AuthProvider";
+import { MessageType } from "../authContext/types";
 
 const webSocketUrl = "192.168.2.104:8080";
 
@@ -8,6 +9,8 @@ interface WebSocketContext {
   joinGame: (gameId: string) => void;
   startGame: () => void;
   closeConnection: () => void;
+  subscribeToMessage: (type: MessageType, callback: (msg: object) => void) => void;
+  sendMessage: (type: MessageType, data: object) => void;
 }
 
 const webSocketContext = React.createContext<WebSocketContext>({
@@ -15,43 +18,50 @@ const webSocketContext = React.createContext<WebSocketContext>({
   joinGame: () => {},
   startGame: () => {},
   closeConnection: () => {},
+  subscribeToMessage: () => {},
+  sendMessage: () => {},
 });
 
 export function useWebSocketContext(): WebSocketContext {
   const context = React.useContext(webSocketContext);
 
   if (!context) {
-    throw new Error(
-      "useWebSocketContext must be called inside the WebSocketProvider"
-    );
+    throw new Error("useWebSocketContext must be called inside the WebSocketProvider");
   }
 
   return context;
 }
 
-enum MessageType {
-  jwt = "jwt",
-  newgame = "newgame",
-  joingame = "joingame",
-  startgame = "startgame",
-  playcard = "playcard",
-  skipturn = "skipturn",
-}
-
-function sendMessage(ws: WebSocket | null, type: MessageType, data: object) {
+function sendMessageToServer(ws: WebSocket | null, type: MessageType, data: object) {
   if (!ws) {
-    console.warn(
-      "Cannot send the message. WebSocket connection is not established"
-    );
+    console.warn("Cannot send the message. WebSocket connection is not established");
     return;
   }
   ws.send(JSON.stringify({ ...data, _type: type }));
   console.log(`sent ${type} message`);
 }
 
+interface CallbackRegistry {
+  [key: string]: Array<(msg: object) => void>;
+}
+
+function onMessage(callbacks: CallbackRegistry) {
+  return (data: MessageEvent) => {
+    console.log("Message received: ");
+    console.log({ data });
+
+    const msg = JSON.parse(data.data ?? "{}");
+    const callbackList = callbacks[msg._type];
+    callbackList?.forEach((callback) => callback(msg));
+  };
+}
+
 function WebSocketProvider(props: React.PropsWithChildren<{}>) {
+  const [connected, setConnected] = useState(false);
   const [ws, setWs] = useState<WebSocket | null>(null);
+
   const { token } = useAuthContext();
+  const [callbacks, setCallbacks] = useState<CallbackRegistry>({});
 
   function connectToWS() {
     console.log("starting connection");
@@ -60,38 +70,44 @@ function WebSocketProvider(props: React.PropsWithChildren<{}>) {
     newWs.onopen = () => {
       console.log("Connected to server");
       // todo error handling
-      sendMessage(newWs, MessageType.jwt, { jwt: `Bearer ${token}` });
+      sendMessageToServer(newWs, MessageType.jwt, { jwt: `Bearer ${token}` });
       // todo: handle negative case
       console.log("Connection approved");
+      setConnected(true);
     };
-    newWs.onmessage = (data) => {
-      console.log("Message received: ");
-      console.log({ data });
-    };
+
+    newWs.onmessage = onMessage(callbacks);
 
     setWs(newWs);
   }
 
+  function sendMessage(type: MessageType, data: object) {
+    sendMessageToServer(ws, type, data);
+  }
+
   function createNewGame() {
-    sendMessage(ws, MessageType.newgame, {});
+    sendMessageToServer(ws, MessageType.newgame, {});
   }
 
   function startGame() {
-    sendMessage(ws, MessageType.startgame, {});
+    sendMessageToServer(ws, MessageType.startgame, {});
   }
 
   function joinGame(gameId: string) {
-    sendMessage(ws, MessageType.joingame, { gameId: gameId });
+    sendMessageToServer(ws, MessageType.joingame, { gameId: gameId });
   }
 
   function closeConnection() {
     if (!ws) {
-      console.warn(
-        "Cannot close connection. WebSocket connection is not established"
-      );
+      console.warn("Cannot close connection. WebSocket connection is not established");
       return;
     }
+    setConnected(false);
     ws.close();
+  }
+
+  function subscribeToMessage(type: MessageType, callback: (msg: object) => void) {
+    setCallbacks((cs) => ({ ...cs, [type]: [...(cs[type] ?? []), callback] }));
   }
 
   useEffect(() => {
@@ -99,11 +115,19 @@ function WebSocketProvider(props: React.PropsWithChildren<{}>) {
     connectToWS();
   }, []);
 
+  // todo check if we can improve that
+  useEffect(() => {
+    console.log("apply subscription change...");
+    if (ws) {
+      ws.onmessage = onMessage(callbacks);
+    }
+  }, [callbacks]);
+
   return (
     <webSocketContext.Provider
-      value={{ createNewGame, joinGame, startGame, closeConnection }}
+      value={{ createNewGame, joinGame, startGame, closeConnection, subscribeToMessage, sendMessage }}
     >
-      {props.children}
+      {connected ? props.children : null}
     </webSocketContext.Provider>
   );
 }

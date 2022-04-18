@@ -5,7 +5,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "env-cmd": "^10.1.0",
-    "prettier": "^2.4.1",
+    "prettier": "^2.6.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
@@ -25,6 +25,10 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "prettier": {
+    "printWidth": 120,
+    "trailingComma": "es5"
   },
   "browserslist": {
     "production": [
