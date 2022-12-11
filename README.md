@@ -1,6 +1,6 @@
-# Start Tournament
+# Star Tournament
 
-A client for Start Tournament game.
+A client for Star Tournament game.
 
 
 Stack: create-react-app + Typescript
